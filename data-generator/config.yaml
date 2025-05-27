@@ -1,0 +1,98 @@
+# Data Generator Configuration
+
+# Kafka Configuration
+kafka:
+  bootstrap_servers: localhost:9092
+  topic_transactions: retail-transactions
+  topic_inventory: retail-inventory
+  topic_customers: retail-customers
+  topic_products: retail-products
+
+# Data Generation Settings
+generation:
+  transactions_per_second: 100
+  stores_count: 10
+  products_per_store: 1000
+  customers_count: 10000
+
+# Data Schemas
+schemas:
+  transaction:
+    - name: transaction_id
+      type: string
+      format: uuid
+    - name: store_id
+      type: integer
+      range: [1, 10]
+    - name: customer_id
+      type: integer
+      range: [1, 10000]
+    - name: product_id
+      type: integer
+      range: [1, 1000]
+    - name: quantity
+      type: integer
+      range: [1, 10]
+    - name: price
+      type: float
+      range: [1.0, 1000.0]
+    - name: timestamp
+      type: timestamp
+      format: iso8601
+
+  inventory:
+    - name: store_id
+      type: integer
+      range: [1, 10]
+    - name: product_id
+      type: integer
+      range: [1, 1000]
+    - name: quantity
+      type: integer
+      range: [0, 1000]
+    - name: last_updated
+      type: timestamp
+      format: iso8601
+
+  customer:
+    - name: customer_id
+      type: integer
+      range: [1, 10000]
+    - name: name
+      type: string
+      format: name
+    - name: email
+      type: string
+      format: email
+    - name: address
+      type: string
+      format: address
+    - name: phone
+      type: string
+      format: phone
+    - name: created_at
+      type: timestamp
+      format: iso8601
+
+  product:
+    - name: product_id
+      type: integer
+      range: [1, 1000]
+    - name: name
+      type: string
+      format: product_name
+    - name: category
+      type: string
+      values: [Electronics, Clothing, Food, Home, Sports]
+    - name: price
+      type: float
+      range: [1.0, 1000.0]
+    - name: created_at
+      type: timestamp
+      format: iso8601
+
+# Logging Configuration
+logging:
+  level: INFO
+  file: data_generator.log
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s" 

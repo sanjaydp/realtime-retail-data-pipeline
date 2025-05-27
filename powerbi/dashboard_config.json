@@ -1,0 +1,132 @@
+{
+    "name": "Retail Analytics Dashboard",
+    "pages": [
+        {
+            "name": "Sales Overview",
+            "visuals": [
+                {
+                    "type": "card",
+                    "title": "Total Sales",
+                    "measure": "Total Sales",
+                    "format": "currency"
+                },
+                {
+                    "type": "card",
+                    "title": "Average Order Value",
+                    "measure": "Average Order Value",
+                    "format": "currency"
+                },
+                {
+                    "type": "line_chart",
+                    "title": "Sales Trend",
+                    "x_axis": "Transactions[timestamp]",
+                    "y_axis": "Total Sales",
+                    "group_by": "Transactions[store_location]"
+                },
+                {
+                    "type": "pie_chart",
+                    "title": "Sales by Payment Method",
+                    "category": "Transactions[payment_method]",
+                    "value": "Total Sales"
+                }
+            ]
+        },
+        {
+            "name": "Inventory Management",
+            "visuals": [
+                {
+                    "type": "card",
+                    "title": "Low Stock Products",
+                    "measure": "Low Stock Products"
+                },
+                {
+                    "type": "table",
+                    "title": "Inventory Status",
+                    "columns": [
+                        "Products[name]",
+                        "Stores[location]",
+                        "Inventory[current_stock]",
+                        "Inventory[reorder_level]"
+                    ]
+                },
+                {
+                    "type": "bar_chart",
+                    "title": "Stock Levels by Category",
+                    "category": "Products[category]",
+                    "value": "Inventory[current_stock]"
+                }
+            ]
+        },
+        {
+            "name": "Customer Insights",
+            "visuals": [
+                {
+                    "type": "card",
+                    "title": "Total Customers",
+                    "measure": "COUNT(Customers[customer_id])"
+                },
+                {
+                    "type": "pie_chart",
+                    "title": "Customer Segments",
+                    "category": "Customers[customer_segment]",
+                    "value": "COUNT(Customers[customer_id])"
+                },
+                {
+                    "type": "line_chart",
+                    "title": "Customer Acquisition",
+                    "x_axis": "Customers[first_purchase_date]",
+                    "y_axis": "COUNT(Customers[customer_id])"
+                }
+            ]
+        },
+        {
+            "name": "Store Performance",
+            "visuals": [
+                {
+                    "type": "map",
+                    "title": "Sales by Location",
+                    "location": "Stores[location]",
+                    "size": "Total Sales"
+                },
+                {
+                    "type": "table",
+                    "title": "Store Rankings",
+                    "columns": [
+                        "Stores[location]",
+                        "Total Sales",
+                        "Average Order Value",
+                        "COUNT(Transactions[transaction_id])"
+                    ]
+                }
+            ]
+        }
+    ],
+    "filters": [
+        {
+            "name": "Date Range",
+            "type": "date_range",
+            "column": "Transactions[timestamp]"
+        },
+        {
+            "name": "Store Location",
+            "type": "multi_select",
+            "column": "Stores[location]"
+        },
+        {
+            "name": "Product Category",
+            "type": "multi_select",
+            "column": "Products[category]"
+        }
+    ],
+    "refresh_settings": {
+        "real_time": {
+            "enabled": true,
+            "interval_minutes": 5
+        },
+        "scheduled": {
+            "enabled": true,
+            "frequency": "daily",
+            "time": "01:00"
+        }
+    }
+} 

@@ -1,0 +1,118 @@
+{
+    "name": "Retail Analytics Data Model",
+    "tables": [
+        {
+            "name": "Transactions",
+            "columns": [
+                {"name": "transaction_id", "dataType": "String", "isKey": true},
+                {"name": "timestamp", "dataType": "DateTime"},
+                {"name": "store_location", "dataType": "String"},
+                {"name": "customer_id", "dataType": "String"},
+                {"name": "total_amount", "dataType": "Decimal"},
+                {"name": "payment_method", "dataType": "String"}
+            ],
+            "relationships": [
+                {
+                    "fromTable": "Transactions",
+                    "fromColumn": "store_location",
+                    "toTable": "Stores",
+                    "toColumn": "location"
+                },
+                {
+                    "fromTable": "Transactions",
+                    "fromColumn": "customer_id",
+                    "toTable": "Customers",
+                    "toColumn": "customer_id"
+                }
+            ]
+        },
+        {
+            "name": "TransactionItems",
+            "columns": [
+                {"name": "transaction_id", "dataType": "String", "isKey": true},
+                {"name": "product_id", "dataType": "String", "isKey": true},
+                {"name": "quantity", "dataType": "Whole Number"},
+                {"name": "price", "dataType": "Decimal"}
+            ],
+            "relationships": [
+                {
+                    "fromTable": "TransactionItems",
+                    "fromColumn": "transaction_id",
+                    "toTable": "Transactions",
+                    "toColumn": "transaction_id"
+                },
+                {
+                    "fromTable": "TransactionItems",
+                    "fromColumn": "product_id",
+                    "toTable": "Products",
+                    "toColumn": "product_id"
+                }
+            ]
+        },
+        {
+            "name": "Products",
+            "columns": [
+                {"name": "product_id", "dataType": "String", "isKey": true},
+                {"name": "name", "dataType": "String"},
+                {"name": "category", "dataType": "String"},
+                {"name": "price", "dataType": "Decimal"}
+            ]
+        },
+        {
+            "name": "Inventory",
+            "columns": [
+                {"name": "store_location", "dataType": "String", "isKey": true},
+                {"name": "product_id", "dataType": "String", "isKey": true},
+                {"name": "current_stock", "dataType": "Whole Number"},
+                {"name": "last_updated", "dataType": "DateTime"},
+                {"name": "reorder_level", "dataType": "Whole Number"}
+            ],
+            "relationships": [
+                {
+                    "fromTable": "Inventory",
+                    "fromColumn": "store_location",
+                    "toTable": "Stores",
+                    "toColumn": "location"
+                },
+                {
+                    "fromTable": "Inventory",
+                    "fromColumn": "product_id",
+                    "toTable": "Products",
+                    "toColumn": "product_id"
+                }
+            ]
+        },
+        {
+            "name": "Stores",
+            "columns": [
+                {"name": "location", "dataType": "String", "isKey": true},
+                {"name": "region", "dataType": "String"},
+                {"name": "opening_date", "dataType": "DateTime"},
+                {"name": "store_type", "dataType": "String"}
+            ]
+        },
+        {
+            "name": "Customers",
+            "columns": [
+                {"name": "customer_id", "dataType": "String", "isKey": true},
+                {"name": "first_purchase_date", "dataType": "DateTime"},
+                {"name": "customer_segment", "dataType": "String"},
+                {"name": "total_spent", "dataType": "Decimal"}
+            ]
+        }
+    ],
+    "measures": [
+        {
+            "name": "Total Sales",
+            "expression": "SUM(Transactions[total_amount])"
+        },
+        {
+            "name": "Average Order Value",
+            "expression": "DIVIDE(SUM(Transactions[total_amount]), COUNT(Transactions[transaction_id]))"
+        },
+        {
+            "name": "Low Stock Products",
+            "expression": "COUNTROWS(FILTER(Inventory, Inventory[current_stock] <= Inventory[reorder_level]))"
+        }
+    ]
+} 

@@ -1,0 +1,106 @@
+{
+    "dashboard_title": "Retail Analytics Dashboard",
+    "description": "Real-time retail analytics dashboard built with Apache Superset",
+    "position_json": {
+        "DASHBOARD_VERSION_KEY": "v2",
+        "ROOT_ID": {
+            "children": ["ROW-1", "ROW-2", "ROW-3"],
+            "id": "ROOT_ID",
+            "type": "ROOT"
+        },
+        "ROW-1": {
+            "children": ["CHART-1", "CHART-2"],
+            "id": "ROW-1",
+            "meta": {
+                "background": "BACKGROUND_TRANSPARENT"
+            },
+            "type": "ROW"
+        },
+        "ROW-2": {
+            "children": ["CHART-3", "CHART-4"],
+            "id": "ROW-2",
+            "meta": {
+                "background": "BACKGROUND_TRANSPARENT"
+            },
+            "type": "ROW"
+        },
+        "ROW-3": {
+            "children": ["CHART-5"],
+            "id": "ROW-3",
+            "meta": {
+                "background": "BACKGROUND_TRANSPARENT"
+            },
+            "type": "ROW"
+        }
+    },
+    "charts": [
+        {
+            "id": "CHART-1",
+            "title": "Daily Sales Trend",
+            "type": "line",
+            "datasource": "retail_transactions",
+            "viz_type": "line",
+            "params": {
+                "metrics": ["sum__total_amount"],
+                "groupby": ["timestamp"],
+                "time_range": "Last 30 days"
+            }
+        },
+        {
+            "id": "CHART-2",
+            "title": "Sales by Store",
+            "type": "bar",
+            "datasource": "retail_transactions",
+            "viz_type": "bar",
+            "params": {
+                "metrics": ["sum__total_amount"],
+                "groupby": ["store_location"]
+            }
+        },
+        {
+            "id": "CHART-3",
+            "title": "Inventory Levels",
+            "type": "table",
+            "datasource": "inventory",
+            "viz_type": "table",
+            "params": {
+                "metrics": ["current_stock"],
+                "groupby": ["product_id", "store_location"]
+            }
+        },
+        {
+            "id": "CHART-4",
+            "title": "Payment Method Distribution",
+            "type": "pie",
+            "datasource": "retail_transactions",
+            "viz_type": "pie",
+            "params": {
+                "metrics": ["sum__total_amount"],
+                "groupby": ["payment_method"]
+            }
+        },
+        {
+            "id": "CHART-5",
+            "title": "Customer Segments",
+            "type": "sunburst",
+            "datasource": "customers",
+            "viz_type": "sunburst",
+            "params": {
+                "metrics": ["count"],
+                "groupby": ["customer_segment", "region"]
+            }
+        }
+    ],
+    "metadata": {
+        "refresh_frequency": 300,
+        "default_filters": {
+            "time_range": "Last 30 days"
+        },
+        "color_scheme": "supersetColors",
+        "label_colors": {
+            "Sales": "#1f77b4",
+            "Inventory": "#ff7f0e",
+            "Customers": "#2ca02c"
+        }
+    }
+} 

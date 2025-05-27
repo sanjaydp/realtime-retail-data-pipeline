@@ -1,0 +1,46 @@
+# Data Processing
+apache-spark==3.4.1
+pyspark==3.4.1
+pandas==2.0.3
+numpy==1.24.3
+
+# Data Ingestion
+kafka-python==2.0.2
+confluent-kafka==2.2.0
+fastapi==0.100.0
+uvicorn==0.23.1
+
+# Database
+psycopg2-binary==2.9.6
+sqlalchemy==2.0.19
+boto3==1.28.15
+
+# Orchestration
+apache-airflow==2.7.1
+apache-airflow-providers-apache-spark==4.1.1
+apache-airflow-providers-postgres==5.6.1
+
+# Monitoring
+prometheus-client==0.17.1
+python-json-logger==2.0.7
+
+# Testing
+pytest==7.4.0
+pytest-cov==4.1.0
+
+# Development
+black==23.7.0
+flake8==6.1.0
+isort==5.12.0
+mypy==1.5.1
+
+# Data Quality
+great-expectations==0.16.13
+
+# Visualization
+apache-superset==2.1.0
+
+# Utilities
+python-dotenv==1.0.0
+requests==2.31.0
+pyyaml==6.0.1 

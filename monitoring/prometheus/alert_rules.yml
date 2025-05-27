@@ -1,0 +1,154 @@
+groups:
+  - name: retail_pipeline
+    rules:
+      # Kafka Alerts
+      - alert: HighKafkaLag
+        expr: kafka_consumer_group_lag > 1000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High Kafka consumer lag
+          description: "Consumer group {{ $labels.group }} has high lag for topic {{ $labels.topic }}"
+
+      - alert: KafkaBrokerDown
+        expr: kafka_broker_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: Kafka broker is down
+          description: "Broker {{ $labels.broker_id }} is not responding"
+
+      # Spark Alerts
+      - alert: SparkJobFailed
+        expr: spark_job_status == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: Spark job failed
+          description: "Spark job {{ $labels.job_name }} has failed"
+
+      - alert: HighSparkProcessingTime
+        expr: spark_processing_time_seconds > 300
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: High Spark processing time
+          description: "Spark job {{ $labels.job_name }} is taking longer than expected"
+
+      # Data Quality Alerts
+      - alert: HighDataQualityErrors
+        expr: data_quality_error_count > 100
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: High number of data quality errors
+          description: "Data quality check {{ $labels.check_name }} is failing frequently"
+
+      - alert: DataFreshnessIssue
+        expr: data_freshness_minutes > 60
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: Data freshness issue
+          description: "Data is not being updated frequently enough"
+
+      # System Alerts
+      - alert: HighCPUUsage
+        expr: rate(process_cpu_seconds_total[5m]) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High CPU usage
+          description: "Process {{ $labels.process }} is using too much CPU"
+
+      - alert: HighMemoryUsage
+        expr: process_resident_memory_bytes / process_virtual_memory_bytes * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High memory usage
+          description: "Process {{ $labels.process }} is using too much memory"
+
+      - alert: DiskSpaceLow
+        expr: node_filesystem_free_bytes / node_filesystem_size_bytes * 100 < 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Low disk space
+          description: "Filesystem {{ $labels.mountpoint }} is running out of space"
+
+      # Pipeline Health Alerts
+      - alert: PipelineLatencyHigh
+        expr: pipeline_latency_seconds > 300
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: High pipeline latency
+          description: "Pipeline {{ $labels.pipeline_name }} is experiencing high latency"
+
+      - alert: PipelineErrorsHigh
+        expr: rate(pipeline_error_count[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: High pipeline error rate
+          description: "Pipeline {{ $labels.pipeline_name }} is experiencing frequent errors"
+
+      # Airflow alerts
+      - alert: AirflowTaskFailed
+        expr: airflow_task_status == "failed"
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Airflow task failure detected
+          description: Task {{ $labels.task_id }} in DAG {{ $labels.dag_id }} has failed
+
+      # PostgreSQL alerts
+      - alert: HighPostgresConnections
+        expr: pg_stat_activity_count > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: High number of PostgreSQL connections
+          description: {{ $value }} active connections detected
+
+      # Data pipeline specific alerts
+      - alert: LowInventoryAlert
+        expr: inventory_count < 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Low inventory alert
+          description: Product {{ $labels.product_id }} at {{ $labels.store_location }} has only {{ $value }} items left
+
+      - alert: HighTransactionVolume
+        expr: rate(transaction_count[5m]) > 100
+        for: 5m
+        labels:
+          severity: info
+        annotations:
+          summary: High transaction volume detected
+          description: {{ $value }} transactions per second at {{ $labels.store_location }}
+
+      - alert: SuspiciousTransactions
+        expr: rate(fraudulent_transaction_count[5m]) > 5
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: Suspicious transaction pattern detected
+          description: {{ $value }} potentially fraudulent transactions per second 
