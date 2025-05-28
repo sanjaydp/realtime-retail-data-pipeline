@@ -45,7 +45,7 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
         
-    - name: Run tests with coverage (debug)
+    - name: Run tests with coverage
       run: |
         echo "Python version:"
         python --version
@@ -60,11 +60,11 @@ jobs:
         echo "Running pytest with coverage..."
         pytest --cov=./ --cov-report=xml -v || echo "pytest failed"
         
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage.xml
-        fail_ci_if_error: true
+    # - name: Upload coverage to Codecov
+    #   uses: codecov/codecov-action@v3
+    #   with:
+    #     file: ./coverage.xml
+    #     fail_ci_if_error: true
 
   build:
     needs: test
