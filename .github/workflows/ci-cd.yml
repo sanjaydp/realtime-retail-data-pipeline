@@ -38,12 +38,7 @@ jobs:
         sudo apt-get install -y librdkafka-dev build-essential python3-dev python3-pip python3-setuptools python3-wheel
         
     - name: Install dependencies
-      run: |
-        echo "Starting pip install"
-        python -m pip install --upgrade pip
-        pip install --verbose -r requirements.txt
-        pip install --verbose pytest pytest-cov flake8
-        echo "Finished pip install"
+      run: pip install -r requirements.txt
         
     - name: Lint with flake8
       run: |
