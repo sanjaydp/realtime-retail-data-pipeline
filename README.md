@@ -68,6 +68,64 @@ cp .env.example .env
 docker-compose up -d
 ```
 
+## End-to-End Demo
+
+This section provides step-by-step instructions to run the entire retail data pipeline locally, from data generation to monitoring.
+
+### 1. Prerequisites
+- Docker & Docker Compose installed
+- Python 3.8+
+- (Optional) AWS credentials for S3 integration
+
+### 2. Clone the Repository
+```bash
+git clone https://github.com/yourusername/realtime-retail-data-pipeline.git
+cd realtime-retail-data-pipeline
+```
+
+### 3. Start All Services
+```bash
+docker-compose up -d
+```
+This will start Kafka, Zookeeper, PostgreSQL, Prometheus, and Grafana.
+
+### 4. Start Airflow
+- Follow instructions in `airflow-dags/README.md` 
+
+# Example (if using docker-compose for Airflow)
+cd airflow-dags
+docker-compose up -d
+```
+
+### 5. Generate Sample Data
+```bash
+python data-generator/generate_retail_data.py
+```
+This will send simulated transactions and inventory updates to Kafka.
+
+### 6. Start Spark Streaming Job
+```bash
+spark-submit --master local[2] spark-jobs/process_retail_stream.py
+```
+
+### 7. Monitor the Pipeline
+- **Grafana Dashboard:** [http://localhost:3000](http://localhost:3000)
+- **Prometheus:** [http://localhost:9090](http://localhost:9090)
+- **Airflow UI:** [http://localhost:8080](http://localhost:8080)
+
+### 8. Run Data Quality Checks
+- Trigger the Airflow DAG for data quality, or run Great Expectations manually:
+```bash
+great_expectations checkpoint run retail_transactions
+```
+
+### 9. Run Tests
+```bash
+pytest tests/
+```
+
+You now have a fully running end-to-end retail data pipeline, with real-time ingestion, processing, quality checks, and monitoring.
+
 ## Usage
 
 ### Data Generation
