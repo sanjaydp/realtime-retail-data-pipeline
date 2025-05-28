@@ -19,19 +19,24 @@ scrape_configs:
 
   - job_name: 'kafka'
     static_configs:
-      - targets: ['kafka:9308']
+      - targets: ['kafka:9090']
 
   - job_name: 'spark'
     static_configs:
-      - targets: ['spark-master:8080']
+      - targets: ['spark-master:4040']
 
   - job_name: 'airflow'
     static_configs:
       - targets: ['airflow-webserver:8080']
 
+  - job_name: 'retail-api'
+    static_configs:
+      - targets: ['api:8000']
+    metrics_path: '/metrics'
+
   - job_name: 'postgres'
     static_configs:
-      - targets: ['postgres:9187']
+      - targets: ['postgres-exporter:9187']
 
   - job_name: 'node-exporter'
     static_configs:

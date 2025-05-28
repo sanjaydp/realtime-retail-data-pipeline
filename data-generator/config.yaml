@@ -7,6 +7,7 @@ kafka:
   topic_inventory: retail-inventory
   topic_customers: retail-customers
   topic_products: retail-products
+  client_id: retail-data-producer
 
 # Data Generation Settings
 generation:
@@ -95,4 +96,76 @@ schemas:
 logging:
   level: INFO
   file: data_generator.log
-  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s" 
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+stores:
+  - location: "New York"
+    region: "Northeast"
+    store_type: "Flagship"
+  - location: "Los Angeles"
+    region: "West"
+    store_type: "Flagship"
+  - location: "Chicago"
+    region: "Midwest"
+    store_type: "Standard"
+  - location: "Houston"
+    region: "South"
+    store_type: "Standard"
+  - location: "Phoenix"
+    region: "West"
+    store_type: "Standard"
+
+products:
+  - id: "P001"
+    name: "Smartphone X"
+    category: "Electronics"
+    price: 999.99
+  - id: "P002"
+    name: "Laptop Pro"
+    category: "Electronics"
+    price: 1499.99
+  - id: "P003"
+    name: "Wireless Earbuds"
+    category: "Electronics"
+    price: 199.99
+  - id: "P004"
+    name: "Men's T-Shirt"
+    category: "Clothing"
+    price: 29.99
+  - id: "P005"
+    name: "Women's Jeans"
+    category: "Clothing"
+    price: 59.99
+  - id: "P006"
+    name: "Coffee Maker"
+    category: "Home & Kitchen"
+    price: 79.99
+  - id: "P007"
+    name: "Blender"
+    category: "Home & Kitchen"
+    price: 49.99
+  - id: "P008"
+    name: "Novel"
+    category: "Books"
+    price: 19.99
+  - id: "P009"
+    name: "Yoga Mat"
+    category: "Sports"
+    price: 24.99
+  - id: "P010"
+    name: "Face Cream"
+    category: "Beauty"
+    price: 34.99
+
+payment_methods:
+  - "Credit Card"
+  - "Debit Card"
+  - "Cash"
+  - "Mobile Payment"
+  - "Gift Card"
+
+customer_segments:
+  - "Premium"
+  - "Regular"
+  - "New"
+  - "VIP" 
