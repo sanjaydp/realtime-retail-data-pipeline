@@ -60,68 +60,68 @@ jobs:
         echo "Running pytest with coverage..."
         pytest --cov=./ --cov-report=xml -v || echo "pytest failed"
         
-    # - name: Upload coverage to Codecov
-    #   uses: codecov/codecov-action@v3
-    #   with:
-    #     file: ./coverage.xml
-    #     fail_ci_if_error: true
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        fail_ci_if_error: true
 
-#   build:
-#     needs: test
-#     runs-on: ubuntu-latest
-#     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-#     
-#     steps:
-#     - uses: actions/checkout@v3
-#     
-#     - name: Set up Docker Buildx
-#       uses: docker/setup-buildx-action@v2
-#       
-#     - name: Login to DockerHub
-#       uses: docker/login-action@v2
-#       with:
-#         username: ${{ secrets.DOCKERHUB_USERNAME }}
-#         password: ${{ secrets.DOCKERHUB_TOKEN }}
-#         
-#     - name: Build and push Docker images
-#       uses: docker/build-push-action@v4
-#       with:
-#         context: .
-#         push: true
-#         tags: |
-#           yourusername/retail-data-pipeline:latest
-#           yourusername/retail-data-pipeline:${{ github.sha }}
-#         cache-from: type=registry,ref=yourusername/retail-data-pipeline:buildcache
-#         cache-to: type=registry,ref=yourusername/retail-data-pipeline:buildcache,mode=max
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: |
+          yourusername/retail-data-pipeline:latest
+          yourusername/retail-data-pipeline:${{ github.sha }}
+        cache-from: type=registry,ref=yourusername/retail-data-pipeline:buildcache
+        cache-to: type=registry,ref=yourusername/retail-data-pipeline:buildcache,mode=max
 
-#   deploy:
-#     needs: build
-#     runs-on: ubuntu-latest
-#     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-#     
-#     steps:
-#     - uses: actions/checkout@v3
-#     
-#     - name: Configure AWS credentials
-#       uses: aws-actions/configure-aws-credentials@v2
-#       with:
-#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#         aws-region: us-east-1
-#         
-#     - name: Deploy to ECS
-#       run: |
-#         aws ecs update-service --cluster retail-cluster --service retail-service --force-new-deployment
-#         
-#     - name: Deploy to S3
-#       run: |
-#         aws s3 sync ./dashboards s3://retail-dashboards/
-#         
-#     - name: Notify Slack
-#       uses: 8398a7/action-slack@v3
-#       with:
-#         status: ${{ job.status }}
-#         fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
-#       env:
-#         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-#       if: always() 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+        
+    - name: Deploy to ECS
+      run: |
+        aws ecs update-service --cluster retail-cluster --service retail-service --force-new-deployment
+        
+    - name: Deploy to S3
+      run: |
+        aws s3 sync ./dashboards s3://retail-dashboards/
+        
+    - name: Notify Slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always() 
