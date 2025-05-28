@@ -39,9 +39,11 @@ jobs:
         
     - name: Install dependencies
       run: |
+        echo "Starting pip install"
         python -m pip install --upgrade pip
         pip install --verbose -r requirements.txt
         pip install --verbose pytest pytest-cov flake8
+        echo "Finished pip install"
         
     - name: Lint with flake8
       run: |
