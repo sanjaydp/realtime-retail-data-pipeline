@@ -45,9 +45,20 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
         
-    - name: Run tests with coverage
+    - name: Run tests with coverage (debug)
       run: |
-        pytest --cov=./ --cov-report=xml
+        echo "Python version:"
+        python --version
+        echo "Pip version:"
+        pip --version
+        echo "Pytest version:"
+        pytest --version || echo "pytest not found"
+        echo "Listing files:"
+        ls -l
+        echo "Looking for tests in ./tests:"
+        ls -l ./tests || echo "No tests directory"
+        echo "Running pytest with coverage..."
+        pytest --cov=./ --cov-report=xml -v || echo "pytest failed"
         
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
